@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(bvh CXX)
+project(madbvh CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_library(bvh INTERFACE)
-target_include_directories(bvh INTERFACE include/)
+add_library(madbvh INTERFACE)
+target_include_directories(madbvh INTERFACE include/)
 
 if (NOT MSVC)
-    find_package(OpenMP QUIET)
-    if (OpenMP_CXX_FOUND)
-        target_link_libraries(bvh INTERFACE OpenMP::OpenMP_CXX)
+    if (WITH_OPENMP)
+        find_package(OpenMP QUIET)
+        if (OpenMP_CXX_FOUND)
+            target_link_libraries(madbvh INTERFACE OpenMP::OpenMP_CXX)
+        endif ()
     endif ()
 else ()
     message(STATUS "OpenMP is disabled because MSVC only supports OpenMP 2.0.")
