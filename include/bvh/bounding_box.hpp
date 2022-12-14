@@ -80,6 +80,20 @@ struct BoundingBox {
             Vector3<Scalar>(std::numeric_limits<Scalar>::max()),
             Vector3<Scalar>(-std::numeric_limits<Scalar>::max()));
     }
+
+    /// Distance-squared from pt to surface of bounding box
+    /// Returns:
+    ///     < 0 indicates pt inside box
+    ///     > 0 indicates pt outside of box
+    template<typename Vector3>
+    bvh_always_inline BoundingBox signed_distance_sqr(const Vector3& pt) const {
+        auto d = (pt - center()).abs() - diagonal*Scalar(0.5);
+        if ((d.array() < 0).all())
+            return d.max();
+        else
+            return (d.array().max(0)).squared_norm();
+    }
+
 };
 
 } // namespace bvh
