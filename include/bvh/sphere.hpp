@@ -18,8 +18,15 @@ struct Sphere  {
         Scalar distance() const { return t; }
     };
 
+    struct Range {
+        Scalar  d;
+
+        Scalar  distance_sqr() const { return d; }
+    };
+
     using ScalarType       = Scalar;
     using IntersectionType = Intersection;
+    using RangeType = Range;
 
     Vector3<Scalar> origin;
     Scalar radius;
@@ -57,6 +64,11 @@ struct Sphere  {
         }
 
         return std::nullopt;
+    }
+
+    std::optional<Range> range(const Vector3<Scalar>& pt) const {
+        auto v = pt - origin;
+        return std::make_optional(Range { v.dot(v) });
     }
 };
 
